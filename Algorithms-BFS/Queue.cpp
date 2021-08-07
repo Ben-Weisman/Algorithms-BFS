@@ -21,7 +21,7 @@ QNode* Queue::Dequeue()
 	return res;
 }
 
-void Queue::Enqueue(Vertex* v)
+void Queue::Enqueue(VertexNode* v)
 {
 	QNode* node = new QNode(v);
 	if (m_Head == nullptr) // Empty list

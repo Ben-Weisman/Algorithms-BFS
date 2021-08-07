@@ -1,14 +1,15 @@
 #ifndef __QUEUE_H
 #define __QUEUE_H
-#include "Vertex.h"
+#include "Graph.h"
+#include "VertexNode.h"
 
-// Queue data node contains a reference to a Vertex.
+// Queue data node contains a reference to a VertexNode object instance.
 struct QNode {
-	Vertex* data;
+	VertexNode* vertexNode;
 	QNode* next;
-	QNode(Vertex* v)
+	QNode(VertexNode* v)
 	{
-		data = v;
+		vertexNode = v;
 		next = nullptr;
 	}
 };
@@ -22,7 +23,7 @@ private:
 
 public:
 	Queue();
-	void Enqueue(Vertex* v);
+	void Enqueue(VertexNode* v);
 	QNode* Dequeue();
 	bool IsEmpty();
 	QNode* Peek();
