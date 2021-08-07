@@ -18,6 +18,5 @@ public:
 	void SetNext(VertexNode* i_Next);
 	void SetSubListHeader(VertexNode* i_Head);
 	void SetSubListTail(VertexNode* i_Tail);
-
 };
 #endif // !__VERTEXNODE_H

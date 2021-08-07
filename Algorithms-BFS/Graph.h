@@ -7,11 +7,17 @@
 
 
 /*TODO:
-1. Overload AddEdge function.
-2. Create c'tor (should get an array of int or string?
-3. ReadGraph - how should we read it? From a file or a keyboard? what's the difference from the c'tor?
-4. Print graph
+1. Overloading AddEdge function?.
+4. Print graph (No specific format given)
+
+2 options to init graph:
+	- Empty C'tor (Empty graph with no vertices) -> ReadGraph from keyboard.
+	- C'tor that gets number of vertices (i.e MakeEmptyGraph()) -- Creates empty graph with n vertices
 */
+
+
+
+
 
 class Graph
 {
@@ -52,10 +58,14 @@ public:
 	void ReadGraph();
 	void PrintGraph();
 	int IsEmpty();
+	
+
+	//TODO
 	int AddEdge(int i, int j);
 	Graph* InverseGraph(Graph* g);
 	Graph* FindShortestPaths(int s, int t);
-	
+	Graph* BFS(Graph* g, int s);
+	///
 };
 
 #endif // !__GRAPH_H
