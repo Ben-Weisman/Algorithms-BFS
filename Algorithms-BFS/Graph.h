@@ -1,7 +1,7 @@
 #ifndef __GRAPH_H
 #define __GRAPH_H
 #include "VertexNode.h"
-
+#include "Queue.h"
 
 
 
@@ -28,6 +28,8 @@ private:
 	VertexNode* m_Tail;
 	
 public:
+	Graph() = default;
+	Graph(const Graph& g);
 	~Graph();
 	/*
 	* Creates empty graph with n vertices.
@@ -52,9 +54,20 @@ public:
 	void AddEdge(int u, int v);
 
 	/*
-	Remove an edge from the graph by removing vertex u from adjacent list of v
+	Remove an edge from the graph by removing vertex v from adjacent list of u
 	*/
 	void RemoveEdge(int u, int v);
+
+	/*
+	BFS algorithm.
+	Param: source vertex s
+	returns: d array which represents the shortest distance of each vertex v from source vertex s
+	*/
+	int* BFS(int s);
+	
+	void RemoveIrrelevantEdges(int* d, int s);
+
+	void RemoveUnaccessibleVerticesAndItsEdges(int* d);
 	void ReadGraph();
 	void PrintGraph();
 	int IsEmpty();
@@ -62,9 +75,9 @@ public:
 
 	//TODO
 	int AddEdge(int i, int j);
-	Graph* InverseGraph(Graph* g);
+	Graph* CreateTransposeGraph(Graph* g);
 	Graph* FindShortestPaths(int s, int t);
-	Graph* BFS(Graph* g, int s);
+	
 	///
 };
 

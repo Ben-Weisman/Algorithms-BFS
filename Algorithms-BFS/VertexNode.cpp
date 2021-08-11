@@ -16,12 +16,12 @@ VertexNode* VertexNode::GetNext()
 	return m_Next;
 }
 
-VertexNode* VertexNode::GetSubListHeader()
+VertexNode* VertexNode::GetVertexNeighbors()
 {
 	return m_SubListHead;
 }
 
-VertexNode* VertexNode::GetSubListTail()
+VertexNode* VertexNode::GetVertexLastNeighbor()
 {
 	return m_SubListTail;
 }
@@ -35,7 +35,7 @@ void VertexNode::SetSubListHeader(VertexNode* i_Head)
 {
 	m_SubListHead = i_Head;
 }
-void VertexNode::SetSubListTail(VertexNode* i_Tail)
+void VertexNode::SetVertexLastNeighbor(VertexNode* i_Tail)
 {
 	m_SubListTail = i_Tail;
 }
