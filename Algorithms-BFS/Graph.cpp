@@ -8,10 +8,7 @@ Graph::Graph()
 {
 
 };
-Graph:: ~Graph()
-{
 
-};
 
 Graph::Graph(const Graph& g)
 {
