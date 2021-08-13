@@ -2,7 +2,7 @@
 #define __GRAPH_H
 #include "VertexNode.h"
 #include "Queue.h"
-
+#include "InputOutput.h"
 
 
 
@@ -69,12 +69,14 @@ public:
 
 	void RemoveUnaccessibleVerticesAndItsEdges(int* d);
 	void ReadGraph();
+
+	int getNumberOfVertex();
+
 	void PrintGraph();
 	int IsEmpty();
 	
 
 	//TODO
-	int AddEdge(int i, int j);
 	Graph* CreateTransposeGraph(Graph* g);
 	Graph* FindShortestPaths(int s, int t);
 	

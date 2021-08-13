@@ -4,7 +4,10 @@
 // TODO: write in readme that sectoin B could be done inside section A, but we followed the algorithm instructions as mentioned. 
 // We also could create a new and EMPTY graph and just add the relevant Edges, but we instead copied the existing one and removed the irrelevant edges.
 
-Graph::Graph(const Graph &g)
+Graph::Graph()
+{
+}
+Graph::Graph(const Graph& g)
 {
 	Graph* res = new Graph();
 	res->MakeEmptyGraph(g.m_numVertices);
@@ -36,7 +39,7 @@ Graph::~Graph()
 			currAdjNode = tmpNodePtr;
 		}
 	}
-	delete []m_NeighborList;
+	delete[]m_NeighborList;
 }
 
 void Graph::MakeEmptyGraph(int i_NumVertices)
@@ -50,7 +53,7 @@ void Graph::MakeEmptyGraph(int i_NumVertices)
 			m_NeighborList[i] = nullptr;
 		}
 	}
-}	
+}
 
 
 
@@ -71,7 +74,7 @@ bool Graph::IsAdjacent(int v, int u)
 			}
 		}
 	}
-	
+
 	return res;
 }
 
@@ -83,10 +86,10 @@ VertexNode* Graph::GetAdjList(int u)
 void Graph::AddEdge(int v, int u)
 {
 
-		VertexNode* sourceVertex = m_NeighborList[v - 1];
-		VertexNode* newNode = new VertexNode(u);
-		sourceVertex->GetVertexLastNeighbor()->SetNext(newNode);
-		sourceVertex->SetVertexLastNeighbor(newNode);
+	VertexNode* sourceVertex = m_NeighborList[v - 1];
+	VertexNode* newNode = new VertexNode(u);
+	sourceVertex->GetVertexLastNeighbor()->SetNext(newNode);
+	sourceVertex->SetVertexLastNeighbor(newNode);
 
 }
 
@@ -100,7 +103,7 @@ void Graph::RemoveEdge(int v, int u)
 	{
 		if (currAdjVertex->GetVertexNum() == u)
 		{
-			if (prevNode != nullptr) 
+			if (prevNode != nullptr)
 			{
 				prevNode->SetNext(currAdjVertex->GetNext());
 			}
@@ -113,7 +116,7 @@ void Graph::RemoveEdge(int v, int u)
 		}
 		prevNode = currAdjVertex;
 		currAdjVertex = currAdjVertex->GetNext();
-		
+
 	}
 
 }
@@ -122,23 +125,20 @@ int Graph::IsEmpty()
 {
 	int res = 0;
 	if (m_numVertices == 0)
-		res =  1;
+		res = 1;
 	return res;
 }
 
-int Graph::AddEdge(int i, int j)
+void Graph::AddEdge(int i, int j)
 {
-	int res = 0;
 	if ((i >= 1 && i <= m_numVertices) && (j >= 1 && j <= m_numVertices))
 	{
 		VertexNode* sourceVertex = m_NeighborList[i - 1];
 		VertexNode* newNode = new VertexNode(j);
 		sourceVertex->GetVertexLastNeighbor()->SetNext(newNode);
 		sourceVertex->SetVertexLastNeighbor(newNode);
-		res = 1;
 	}
-	return res;
-	
+
 }
 
 int* Graph::BFS(int s)
@@ -165,7 +165,7 @@ int* Graph::BFS(int s)
 	{
 		// u = prev vertex
 		// i = u's neighbor (as type VertexNode)
-		u = q.Dequeue()->vertexNode->GetVertexNum()-1;
+		u = q.Dequeue()->vertexNode->GetVertexNum() - 1;
 		for (VertexNode* i = m_NeighborList[u]->GetVertexNeighbors(); i != nullptr; i = i->GetNext()) // Iterate through all of u's neighbors.
 		{
 			int v = i->GetVertexNum() - 1; // u's neighbor integer value
@@ -242,4 +242,21 @@ void Graph::RemoveUnaccessibleVerticesAndItsEdges(int* d)
 			RemoveVertex(i + 1);
 		}
 	}
+}
+
+void Graph::ReadGraph()
+{
+	InpuOutput io;
+	int numberOfEdges;
+	int* arrayOfEdges = io.getEdges(numberOfEdges, m_numVertices);
+
+	for (int i = 0; i < numberOfEdges*2; i += 2)
+	{
+		this->AddEdge(i, i + 1);
+	}
+};
+
+int Graph::getNumberOfVertex()
+{
+	return m_numVertices;
 }
