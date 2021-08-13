@@ -4,6 +4,15 @@
 // TODO: write in readme that sectoin B could be done inside section A, but we followed the algorithm instructions as mentioned. 
 // We also could create a new and EMPTY graph and just add the relevant Edges, but we instead copied the existing one and removed the irrelevant edges.
 
+Graph::Graph()
+{
+
+};
+Graph:: ~Graph()
+{
+
+};
+
 Graph::Graph(const Graph& g)
 {
 	Graph* res = new Graph();
@@ -51,8 +60,6 @@ void Graph::MakeEmptyGraph(int i_NumVertices)
 		}
 	}
 }
-
-
 
 bool Graph::IsAdjacent(int v, int u)
 {
@@ -131,7 +138,6 @@ void Graph::AddEdge(int i, int j)
 		sourceVertex->GetVertexLastNeighbor()->SetNext(newNode);
 		sourceVertex->SetVertexLastNeighbor(newNode);
 	}
-
 }
 
 int* Graph::BFS(int s)
@@ -243,11 +249,11 @@ void Graph::RemoveUnaccessibleVerticesAndItsEdges(int* d)
 		}
 	}
 }
-void Graph :: RemoveVetexEdges(int vertexId)
+void Graph::RemoveVetexEdges(int vertexId)
 {
 	VertexNode* neighbor = m_NeighborList[vertexId - 1]->GetVertexNeighbors();
 	VertexNode* nextNeighbor;
-	while (neighbor !=nullptr)
+	while (neighbor != nullptr)
 	{
 		nextNeighbor = neighbor->GetNext();
 		delete[] neighbor;
@@ -259,7 +265,7 @@ void Graph :: RemoveVetexEdges(int vertexId)
 void Graph::ReadGraph()
 {
 	InpuOutput io;
-	int numberOfEdges;
+	int numberOfEdges = 0;
 	int* arrayOfEdges = io.getEdges(numberOfEdges, m_numVertices);
 
 	for (int i = 0; i < numberOfEdges * 2; i += 2)
@@ -272,3 +278,22 @@ int Graph::getNumberOfVertex()
 {
 	return m_numVertices;
 }
+
+Graph* Graph::CreateTransposeGraph(Graph* g)
+{
+	Graph* gt = new Graph();
+	VertexNode* iNeighbor;
+	gt->MakeEmptyGraph(g->getNumberOfVertex());
+
+	for (int i = 0; i < g->getNumberOfVertex(); i++)
+	{
+		iNeighbor = g->GetAdjList(i)->GetVertexNeighbors();
+		while (iNeighbor != nullptr)
+		{
+			gt->AddEdge(iNeighbor->GetVertexNum(), i);
+			iNeighbor = iNeighbor->GetNext();
+		}
+	}
+	return gt;
+
+};

@@ -3,27 +3,27 @@
 
 
 //TODO: adding the runtime function.
-  void main()
+void main()
 {
-	  Graph g;
-	  Graph* h;
-	  InpuOutput io;
-	  int countOfVertex;
-	  countOfVertex = io.getCountOfVertexFromUser();
-	  int s = io.getStartVertex(countOfVertex);
-	  int t = io.getTargetVertex(countOfVertex);
-	  g.MakeEmptyGraph(countOfVertex);
-	  g.ReadGraph();
-	  h = g.FindShortestPaths(s, t);
-	  if (h == nullptr)
-	  {
-		  io.printNoPathErrorAndExit();
-	  }
-	  else
-	  {
-		  io.printGraph(*h);
-	  }
+	Graph g;
+	Graph* h;
+	InpuOutput io;
+	int countOfVertex;
+	countOfVertex = io.getCountOfVertexFromUser();
+	int s = io.getStartVertex(countOfVertex);
+	int t = io.getTargetVertex(countOfVertex);
+	g.MakeEmptyGraph(countOfVertex);
+	g.ReadGraph();
+	h = g.FindShortestPaths(s, t);
+	if (h == nullptr)
+	{
+		io.printNoPathErrorAndExit();
+	}
+	else
+	{
+		io.printGraph(*h);
+	}
 
-	  delete h;
+	delete h;
 
 }

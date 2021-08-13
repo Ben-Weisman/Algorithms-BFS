@@ -15,10 +15,6 @@
 	- C'tor that gets number of vertices (i.e MakeEmptyGraph()) -- Creates empty graph with n vertices
 */
 
-
-
-
-
 class Graph
 {
 private:
@@ -26,11 +22,11 @@ private:
 	VertexNode** m_NeighborList;
 	VertexNode* m_Head;
 	VertexNode* m_Tail;
-	
+
 public:
-	Graph() = default;
-	Graph(const Graph& g);
+	Graph();
 	~Graph();
+	Graph(const Graph& g);
 	/*
 	* Creates empty graph with n vertices.
 	* @param: number of vertices in the graph.
@@ -64,7 +60,7 @@ public:
 	returns: d array which represents the shortest distance of each vertex v from source vertex s
 	*/
 	int* BFS(int s);
-	
+
 	void RemoveIrrelevantEdges(int* d, int s);
 
 	void RemoveUnaccessibleVerticesAndItsEdges(int* d);
@@ -73,15 +69,13 @@ public:
 
 	int getNumberOfVertex();
 
-	void PrintGraph();
 	int IsEmpty();
-	
+
 
 	//TODO
 	Graph* CreateTransposeGraph(Graph* g);
 	Graph* FindShortestPaths(int s, int t);
-	
-	///
+
 };
 
 #endif // !__GRAPH_H
