@@ -92,6 +92,27 @@ int* InpuOutput::getEdges(int& o_NumberOfEdegs, int i_maxVertexId)
 	return arr;
 
 }
+//TODO: Need to implement;
+void InpuOutput::printGraph(Graph& g)
+{
+	VertexNode* currentVertexNeghiborList;
+	for (int i = 1; i <= g.getNumberOfVertex() ; i++)
+	{
+		currentVertexNeghiborList = g.GetAdjList(i);
+			while (currentVertexNeghiborList != nullptr)
+			{
+				cout << "(" + i + ',' + currentVertexNeghiborList->GetVertexNum() + '), ';
+				currentVertexNeghiborList = currentVertexNeghiborList->GetNext();
+			}
+
+	}
+}
+
+void InpuOutput::printNoPathErrorAndExit()
+{
+	cout << "There is no existing path between s and t that you choose.";
+	exit(2);
+}
 
 bool InpuOutput::isVertexInRange(int i_VertexId, int i_MaxIndex)
 {

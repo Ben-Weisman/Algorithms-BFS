@@ -1,4 +1,6 @@
 #pragma once
+#include "Graph.h"
+
 #define MIN_RANGE_OF_VERTEX 1
 #define MIN_AMOUNT_OF_VERTEX 2
 
@@ -10,7 +12,8 @@ public:
 	static int getStartVertex(int i_MaxValueOfVertex);
 	static int getTargetVertex(int i_MaxValueOfVertex);
 	static int* getEdges(int& o_NumberOfEdegs, int i_maxVertexId);
-
+	static void printGraph(Graph& g);
+	static void printNoPathErrorAndExit();
 private:
 	static void insertNumberToArray(int& io_PhyzSize, int& io_LogicSize, int i_number, int* io_Array);
 	static bool isWhitespace(char i_ch);

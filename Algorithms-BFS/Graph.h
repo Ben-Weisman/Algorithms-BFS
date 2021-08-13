@@ -68,6 +68,7 @@ public:
 	void RemoveIrrelevantEdges(int* d, int s);
 
 	void RemoveUnaccessibleVerticesAndItsEdges(int* d);
+	void RemoveVetexEdges(int vertexId);
 	void ReadGraph();
 
 	int getNumberOfVertex();

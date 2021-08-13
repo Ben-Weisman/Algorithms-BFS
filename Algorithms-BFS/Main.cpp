@@ -15,7 +15,14 @@
 	  g.MakeEmptyGraph(countOfVertex);
 	  g.ReadGraph();
 	  h = g.FindShortestPaths(s, t);
-	  h->PrintGraph();
+	  if (h == nullptr)
+	  {
+		  io.printNoPathErrorAndExit();
+	  }
+	  else
+	  {
+		  io.printGraph(*h);
+	  }
 
 	  delete h;
 

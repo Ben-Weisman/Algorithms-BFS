@@ -4,9 +4,6 @@
 // TODO: write in readme that sectoin B could be done inside section A, but we followed the algorithm instructions as mentioned. 
 // We also could create a new and EMPTY graph and just add the relevant Edges, but we instead copied the existing one and removed the irrelevant edges.
 
-Graph::Graph()
-{
-}
 Graph::Graph(const Graph& g)
 {
 	Graph* res = new Graph();
@@ -80,18 +77,14 @@ bool Graph::IsAdjacent(int v, int u)
 
 VertexNode* Graph::GetAdjList(int u)
 {
+	if (m_NeighborList[u - 1] == nullptr)
+	{
+		return nullptr;
+	}
 	return m_NeighborList[u - 1]->GetVertexNeighbors();
 }
 
-void Graph::AddEdge(int v, int u)
-{
 
-	VertexNode* sourceVertex = m_NeighborList[v - 1];
-	VertexNode* newNode = new VertexNode(u);
-	sourceVertex->GetVertexLastNeighbor()->SetNext(newNode);
-	sourceVertex->SetVertexLastNeighbor(newNode);
-
-}
 
 void Graph::RemoveEdge(int v, int u)
 {
@@ -190,12 +183,20 @@ Graph* Graph::FindShortestPaths(int s, int t)
 {
 	int* d = Graph::BFS(s); // Section A
 	Graph* gs = this; // TODO: check if correct copying
+	if (d[t - 1] == -1)
+	{
+		return nullptr;
+	}
 	gs->RemoveIrrelevantEdges(d, s); // Section B
 	gs->RemoveUnaccessibleVerticesAndItsEdges(d);
 
 	Graph* gsTranspose = CreateTransposeGraph(gs); // Part C
 
 	d = gsTranspose->BFS(t); // Part D
+	if (d[s - 1] == -1)
+	{
+		return nullptr;
+	}
 	gsTranspose->RemoveUnaccessibleVerticesAndItsEdges(d);
 	return gsTranspose->CreateTransposeGraph(gsTranspose); // Section E
 
@@ -238,19 +239,30 @@ void Graph::RemoveUnaccessibleVerticesAndItsEdges(int* d)
 	{
 		if (d[i] == -1) // Vertex is inaccessible 
 		{
-			m_NeighborList[i + 1]->GetVertexNeighbors()->RemoveAllEdges();
-			RemoveVertex(i + 1);
+			RemoveVetexEdges(i + 1);
 		}
 	}
 }
-
+void Graph :: RemoveVetexEdges(int vertexId)
+{
+	VertexNode* neighbor = m_NeighborList[vertexId - 1]->GetVertexNeighbors();
+	VertexNode* nextNeighbor;
+	while (neighbor !=nullptr)
+	{
+		nextNeighbor = neighbor->GetNext();
+		delete[] neighbor;
+		neighbor = nextNeighbor;
+	}
+	// delete m_NeighborList[vertexId - 1]
+//TODO: should re- organized the array or should we just print the vertex and the heighbors that not nullptr?
+}
 void Graph::ReadGraph()
 {
 	InpuOutput io;
 	int numberOfEdges;
 	int* arrayOfEdges = io.getEdges(numberOfEdges, m_numVertices);
 
-	for (int i = 0; i < numberOfEdges*2; i += 2)
+	for (int i = 0; i < numberOfEdges * 2; i += 2)
 	{
 		this->AddEdge(i, i + 1);
 	}
