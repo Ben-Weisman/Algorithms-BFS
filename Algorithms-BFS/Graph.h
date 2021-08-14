@@ -16,12 +16,11 @@ private:
 	VertexNode** m_NeighborList;
 	VertexNode* m_Head;
 	VertexNode* m_Tail;
-	/// <summary>
-	/// 
-	/// </summary>
+
+
 	/// <param name="i_d"></param>
 	/// <param name="i_VertexNum"></param>
-	/// <returns></returns>
+	/// <returns>bool if there is path to a specific vertex</returns>
 	bool IsPathExists(const int* i_d, const int i_VertexNum);
 
 public:
@@ -48,7 +47,7 @@ public:
 	/*
 	Adds a neighbor to a given vertex in the neighbor list
 	*/
-	void AddEdge(const int u,const int v);
+	void AddEdge(const int u, const int v);
 
 	/*
 	Remove an edge from the graph by removing vertex v from adjacent list of u
@@ -73,7 +72,10 @@ public:
 	Param: d array that represents the shortest path from s to given v, and the source vertex (Created at BFS method).*/
 	void RemoveUnaccessibleVerticesAndItsEdges(int* d);
 
-
+	/// <summary>
+	/// removing the given edges and his nighbors from the neighbor list.
+	/// </summary>
+	/// <param name="vertexId"> The vertext the should be removed</param>
 	void RemoveVertexAndItsEdges(int vertexId);
 
 	/*
@@ -84,10 +86,14 @@ public:
 	// returns m_numVertices.
 	int GetNumberOfVertices();
 
+	/// <summary>
+	/// Checking if this graph is empty;
+	/// </summary>
+	/// <returns></returns>
 	bool IsEmpty();
 
 	/*
-	Returns the transpose of given g graph. 
+	Returns the transpose of given g graph.
 	Param: Graph g
 	*/
 	Graph* CreateTransposeGraph(Graph* g);
@@ -98,6 +104,8 @@ public:
 	*/
 	Graph* FindShortestPaths(int s, int t);
 
+
+	/// <returns>Array of vertexes in the graph.</returns>
 	VertexNode** GetNeighborList();
 
 };

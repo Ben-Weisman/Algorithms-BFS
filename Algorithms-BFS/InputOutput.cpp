@@ -110,11 +110,6 @@ bool InpuOutput::isVertexInRange(int i_VertexId, int i_MaxIndex)
 	return false;
 }
 
-void InpuOutput::NotInRamgeEror(int i_VertexId)
-{
-	cout << "Not In range\n" << i_VertexId << "\n";
-
-}
 
 void InpuOutput::PrintRunTimeValue(double i_timeTaken)
 {
