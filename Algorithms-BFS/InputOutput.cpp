@@ -115,7 +115,7 @@ void InpuOutput::PrintRunTimeValue(double i_timeTaken)
 {
 
 	i_timeTaken *= 1e-9;
-	cout << "Time taken by function <name-of-fun> is : ";
+	cout << "Time taken by function 'FindShortestPaths' is : ";
 	cout << fixed;
 	cout << setprecision(9);
 	cout<< i_timeTaken << setprecision(9) << " sec" << endl;
