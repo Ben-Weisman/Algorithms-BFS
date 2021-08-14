@@ -250,48 +250,78 @@ Graph* Graph::FindShortestPaths(int s, int t)
 
 void Graph::RemoveLongerPathsFromGraph(int* d, int s)
 {
-	VertexNode* currentVertex = m_NeighborList[s - 1];
-	VertexNode* neighborOfCurrentVertex = nullptr;
-	bool* visited = new bool[m_numVertices];
+	//VertexNode* currentVertex = m_NeighborList[s - 1];
+	//VertexNode* neighborOfCurrentVertex = nullptr;
+	//bool* visited = new bool[m_numVertices];
 
-	for (int i = 0; i < m_numVertices; i++)
+
+	///////////////
+
+	for (int i = 0; i < this->m_numVertices; i++)
 	{
-		visited[i] = false;
-	}
-
-	Queue q;
-	int u;
-
-
-	// Source is the first vertex to be visited.
-	q.Enqueue(new VertexNode(s));
-
-	while (!q.IsEmpty())
-	{
-		// u = prev vertex
-		u = q.Dequeue()->GetVertexNum();
-		visited[u - 1] = true;
-		VertexNode* currAdj = m_NeighborList[u-1]->GetVertexNeighbors();
+		VertexNode* currAdj = this->m_NeighborList[i]->GetVertexNeighbors();
 
 		while (currAdj != nullptr)
 		{
-			int v = currAdj->GetVertexNum(); // u's neighbor integer value
-
-			if (d[u - 1] + 1 > d[v - 1] && !visited[v-1])
+			int v = currAdj->GetVertexNum();
+			if (d[i] + 1 > d[v - 1])
 			{
-				VertexNode* tmp = currAdj->GetNext();
-				RemoveEdge(u, v);
-				currAdj = tmp;
+				VertexNode* nextNodePtr = currAdj->GetNext();
+				RemoveEdge(i+1, v);
+				currAdj = nextNodePtr;
 			}
-
-			else if (!visited[currAdj->GetVertexNum() - 1])
+			else
 			{
-				q.Enqueue(currAdj);
+				currAdj = currAdj->GetNext();
 			}
 			
-			currAdj = currAdj->GetNext();
 		}
 	}
+
+
+
+	/////////////
+	//for (int i = 0; i < m_numVertices; i++)
+	//{
+	//	visited[i] = false;
+	//}
+
+	//Queue q;
+	//int u;
+
+
+	// Source is the first vertex to be visited.
+	//q.Enqueue(new VertexNode(s));
+
+	//while (!q.IsEmpty())
+	//{
+	//	 u = prev vertex
+	//	u = q.Dequeue()->GetVertexNum();
+	//	visited[u - 1] = true;
+	//	VertexNode* currAdj = m_NeighborList[u-1]->GetVertexNeighbors();
+
+	//	while (currAdj != nullptr)
+	//	{
+	//		int v = currAdj->GetVertexNum(); // u's neighbor integer value
+
+	//		if (!visited[v - 1])
+	//		{
+	//			q.Enqueue(currAdj);
+	//		}
+	//		
+	//		if (d[u - 1] + 1 > d[v - 1])
+	//		{
+	//			VertexNode* tmp = currAdj->GetNext();
+	//			RemoveEdge(u, v);
+	//			currAdj = tmp;
+	//		}
+	//		else
+	//		{
+	//			currAdj = currAdj->GetNext();
+	//		}
+	//		
+	//	}
+	//}
 }
 
 void Graph::RemoveUnaccessibleVerticesAndItsEdges(int* d)
