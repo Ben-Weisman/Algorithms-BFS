@@ -63,7 +63,6 @@ int* InpuOutput::getEdges(int& o_NumberOfEdegs, int i_maxVertexId)
 	int* arr = new int[phyzSize];
 
 	cout << "Please start to eneter the edges: ";
-
 	while (ch != EOF)
 	{
 		ch = getchar();

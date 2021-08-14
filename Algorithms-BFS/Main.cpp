@@ -5,6 +5,7 @@
 //TODO: adding the runtime function.
 void main()
 {
+
 	Graph g;
 	Graph* h;
 	InpuOutput io;
