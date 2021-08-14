@@ -4,7 +4,6 @@
 #include <chrono>
 using namespace std;
 
-//TODO: adding the runtime function.
 void main()
 {
 

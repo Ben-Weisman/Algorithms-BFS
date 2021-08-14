@@ -1,8 +1,6 @@
 #include "Graph.h"
 #include "InputOutput.h"
 
-// TODO: write in readme that sectoin B could be done inside section A, but we followed the algorithm instructions as mentioned. 
-// We also could create a new and EMPTY graph and just add the relevant Edges, but we instead copied the existing one and removed the irrelevant edges.
 
 Graph::Graph()
 {
@@ -223,7 +221,7 @@ Graph* Graph::FindShortestPaths(int s, int t)
 {
 	int* p = new int [m_numVertices];
 	int* d = Graph::BFS(s, p); // Section A
-	Graph* gs = new Graph(*this); // TODO: check if correct copying
+	Graph* gs = new Graph(*this); 
 	if (!IsPathExists(d, t))
 	{
 		return nullptr;
