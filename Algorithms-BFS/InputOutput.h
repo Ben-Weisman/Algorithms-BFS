@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __INPUTOUTPUT_H
+#define __INPUTOUTPUT_H
+
 #include "Graph.h"
 
 #define MIN_RANGE_OF_VERTEX 1
@@ -20,4 +22,4 @@ private:
 	static void PrintErrorMessageAndExit();
 	static bool isVertexInRange(int i_VertexId, int i_MaxIndex);
 };
-
+#endif // !__INPUTOUTPUT_H

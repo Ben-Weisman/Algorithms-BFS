@@ -1,5 +1,5 @@
 #include "Graph.h"
-
+#include "InputOutput.h"
 
 // TODO: write in readme that sectoin B could be done inside section A, but we followed the algorithm instructions as mentioned. 
 // We also could create a new and EMPTY graph and just add the relevant Edges, but we instead copied the existing one and removed the irrelevant edges.
@@ -126,7 +126,7 @@ int Graph::IsEmpty()
 	return res;
 }
 
-void Graph::AddEdge(int i, int j)
+void Graph::AddEdge(const int i,const int j)
 {
 	if ((i >= 1 && i <= m_numVertices) && (j >= 1 && j <= m_numVertices))
 	{
@@ -242,18 +242,18 @@ void Graph::RemoveUnaccessibleVerticesAndItsEdges(int* d)
 	{
 		if (d[i] == -1) // Vertex is inaccessible 
 		{
-			RemoveVetexEdges(i + 1);
+			RemoveVertexEdges(i + 1);
 		}
 	}
 }
-void Graph::RemoveVetexEdges(int vertexId)
+void Graph::RemoveVertexEdges(int i_vertexNum)
 {
-	VertexNode* neighbor = m_NeighborList[vertexId - 1]->GetVertexNeighbors();
+	VertexNode* neighbor = m_NeighborList[i_vertexNum - 1]->GetVertexNeighbors();
 	VertexNode* nextNeighbor;
 	while (neighbor != nullptr)
 	{
 		nextNeighbor = neighbor->GetNext();
-		delete[] neighbor;
+		delete neighbor;
 		neighbor = nextNeighbor;
 	}
 	// delete m_NeighborList[vertexId - 1]

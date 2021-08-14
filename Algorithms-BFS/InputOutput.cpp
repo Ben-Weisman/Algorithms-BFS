@@ -86,7 +86,7 @@ int* InpuOutput::getEdges(int& o_NumberOfEdegs, int i_maxVertexId)
 	{
 		PrintErrorMessageAndExit();
 	}
-
+	 
 	o_NumberOfEdegs = logicSize / 2;
 
 	return arr;

@@ -1,14 +1,13 @@
 #include "VertexNode.h"
 
-VertexNode::VertexNode(int i_VertexNum)
+VertexNode::VertexNode(int i_VertexNum): m_VertexNum(i_VertexNum)
 {
-	m_VertexNums = i_VertexNum;
 	m_Next = m_SubListHead = m_SubListTail = nullptr;
 }
 
-int VertexNode::GetVertexNum()
+const int VertexNode::GetVertexNum()
 {
-	return m_VertexNums;
+	return m_VertexNum;
 }
 
 VertexNode* VertexNode::GetNext()
