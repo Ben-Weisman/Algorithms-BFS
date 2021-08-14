@@ -2,7 +2,10 @@
 #define __GRAPH_H
 #include "VertexNode.h"
 #include "Queue.h"
-class InputOutput; // forward declaration
+#include <iostream>
+using namespace std;
+#define _CRT_SECURE_NO_WARNINGS
+static class InputOutput; // forward declaration
 
 /*TODO:
 1. Overloading AddEdge function?.

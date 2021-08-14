@@ -56,16 +56,17 @@ Graph::~Graph()
 
 void Graph::MakeEmptyGraph(int i_NumVertices)
 {
+	this->m_numVertices = i_NumVertices;
 	if (i_NumVertices > 0)
 	{
 		m_NeighborList = new VertexNode * [i_NumVertices];
 
 		for (int i = 0; i < i_NumVertices; i++)
 		{
-			m_NeighborList[i] = new VertexNode(i+1);
+			m_NeighborList[i] = new VertexNode(i + 1);
 		}
 	}
-	
+
 }
 
 bool Graph::IsAdjacent(int v, int u)
@@ -143,7 +144,7 @@ bool Graph::IsEmpty()
 	return res;
 }
 
-void Graph::AddEdge(const int i,const int j)
+void Graph::AddEdge(const int i, const int j)
 {
 	if ((i >= 1 && i <= m_numVertices) && (j >= 1 && j <= m_numVertices))
 	{
@@ -152,6 +153,15 @@ void Graph::AddEdge(const int i,const int j)
 		if (sourceVertex != nullptr)
 		{
 			VertexNode* newNode = new VertexNode(j);
+			if (sourceVertex->GetVertexNeighbors() == nullptr)
+			{
+				sourceVertex->SetSubListHeader(newNode);
+				sourceVertex->SetVertexLastNeighbor(newNode);
+			}
+			else
+			{
+
+			}
 			sourceVertex->GetVertexLastNeighbor()->SetNext(newNode);
 			sourceVertex->SetVertexLastNeighbor(newNode);
 		}
@@ -229,7 +239,7 @@ Graph* Graph::FindShortestPaths(int s, int t)
 	Graph* hRes = gsTranspose->CreateTransposeGraph(gsTranspose); // Section E
 	delete gsTranspose;
 	return hRes;
-	
+
 }
 
 void Graph::RemoveLongerPathsFromGraph(int* d, int s)
@@ -268,7 +278,7 @@ void Graph::RemoveLongerPathsFromGraph(int* d, int s)
 
 void Graph::RemoveUnaccessibleVerticesAndItsEdges(int* d)
 {
-	
+
 	for (int i = 0; i < m_numVertices; i++)
 	{
 		if (d[i] == -1) // Vertex is inaccessible 
@@ -297,16 +307,8 @@ void Graph::RemoveVertexAndItsEdges(int i_vertexNum)
 void Graph::ReadGraph()
 {
 	InpuOutput io;
-	int numberOfEdges = 0;
-	int* arrayOfEdges = io.getEdges(numberOfEdges, m_numVertices);
-
-	for (int i = 0; i < numberOfEdges * 2; i += 2)
-	{
-		this->AddEdge(i, i + 1);
-	}
-
-	delete[] arrayOfEdges;
-};
+	io.addingEdgesFromUser(*this);
+}
 
 int Graph::GetNumberOfVertices()
 {
@@ -326,7 +328,7 @@ Graph* Graph::CreateTransposeGraph(Graph* g)
 			iNeighbor = g->GetAdjList(i + 1)->GetVertexNeighbors();
 			while (iNeighbor != nullptr)
 			{
-				gt->AddEdge(iNeighbor->GetVertexNum(), i+1);
+				gt->AddEdge(iNeighbor->GetVertexNum(), i + 1);
 				iNeighbor = iNeighbor->GetNext();
 			}
 		}
@@ -334,7 +336,7 @@ Graph* Graph::CreateTransposeGraph(Graph* g)
 	return gt;
 };
 
-bool Graph::IsPathExists(const int* d,const int i_VertexNum)
+bool Graph::IsPathExists(const int* d, const int i_VertexNum)
 {
 	return d[i_VertexNum - 1] == -1;
 }

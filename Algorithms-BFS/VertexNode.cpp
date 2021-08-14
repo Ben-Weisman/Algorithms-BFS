@@ -32,7 +32,17 @@ void VertexNode::SetNext(VertexNode* i_Next)
 
 void VertexNode::SetSubListHeader(VertexNode* i_Head)
 {
-	m_SubListHead = i_Head;
+	if (m_SubListHead != nullptr)
+	{
+		VertexNode* originalHead = m_SubListHead;
+		m_SubListHead = i_Head;
+		m_SubListHead ->SetNext( originalHead->m_Next);
+	}
+	else
+	{
+		m_SubListHead = m_SubListTail = i_Head;
+
+	}
 }
 void VertexNode::SetVertexLastNeighbor(VertexNode* i_Tail)
 {

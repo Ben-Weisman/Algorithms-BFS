@@ -11,13 +11,13 @@ int InpuOutput::getCountOfVertexFromUser()
 	cin >> maxVertexIndex;
 	if (maxVertexIndex < MIN_AMOUNT_OF_VERTEX)
 	{
-		PrintErrorMessageAndExit();
+		PrintErrorInputMessageAndExit();
 	}
 	return maxVertexIndex;
 }
 
 
-void InpuOutput::PrintErrorMessageAndExit()
+void InpuOutput::PrintErrorInputMessageAndExit()
 {
 	cout << "Wrong Input";
 	exit(1);
@@ -30,7 +30,7 @@ int InpuOutput::getStartVertex(int i_MaxValueOfVertex)
 	cin >> sVertex;
 	if (!isVertexInRange(sVertex, i_MaxValueOfVertex))
 	{
-		PrintErrorMessageAndExit();
+		PrintErrorInputMessageAndExit();
 	}
 	return sVertex;
 }
@@ -42,56 +42,42 @@ int InpuOutput::getTargetVertex(int i_MaxValueOfVertex)
 	cin >> tVertex;
 	if (!isVertexInRange(tVertex, i_MaxValueOfVertex))
 	{
-		PrintErrorMessageAndExit();
+		PrintErrorInputMessageAndExit();
 	}
 	return tVertex;
-
 }
 
-int* InpuOutput::getEdges(int& o_NumberOfEdegs, int i_maxVertexId)
+void InpuOutput::addingEdgesFromUser(Graph& g)
 {
 
-	bool result = true;
-	bool valid = true;
-	int currentNumber = 0;
-	int numbersOfVertexEntered = 0;
-	int logSize = 0;
-	int index;
-	char ch = 1;
-	int logicSize = 0;
-	int phyzSize = MIN_AMOUNT_OF_VERTEX;
-	int* arr = new int[phyzSize];
+	int maxVertexNum = g.GetNumberOfVertices();
+	int sourceVertex = 0;
+	int destinationVertex = 0;
 
 	cout << "Please start to eneter the edges: ";
 
-	while (ch != EOF)
+	while (!cin.fail())
 	{
-		ch = getchar();
-		while (!isWhitespace(ch) && ch != EOF)
+		cin >> sourceVertex;
+		if (cin.fail())
 		{
-			currentNumber = 10 * currentNumber + ch - '0';
-			ch = getchar();
+			break;
 		}
+		cin >> destinationVertex;
+	
 
-		if (!isVertexInRange(currentNumber, i_maxVertexId))
+		if (cin.fail()|| !isVertexInRange(sourceVertex, maxVertexNum) || !isVertexInRange(destinationVertex, maxVertexNum))
 		{
-			PrintErrorMessageAndExit();
+			PrintErrorInputMessageAndExit();
 		}
-
-		insertNumberToArray(phyzSize, logicSize, currentNumber, arr);
-
+		else
+		{
+			g.AddEdge(sourceVertex, destinationVertex);
+		}
 	}
-
-	if (logicSize % 2 != 0)
-	{
-		PrintErrorMessageAndExit();
-	}
-	 
-	o_NumberOfEdegs = logicSize / 2;
-
-	return arr;
-
 }
+
+
 void InpuOutput::printGraph(Graph& i_g)
 {
 	VertexNode* currentVertexNeghiborList;
@@ -122,23 +108,9 @@ bool InpuOutput::isVertexInRange(int i_VertexId, int i_MaxIndex)
 	return false;
 }
 
-void InpuOutput::insertNumberToArray(int& io_PhyzSize, int& io_LogicSize, int i_number, int* io_Array)
+void InpuOutput::NotInRamgeEror(int i_VertexId)
 {
-	int* newArr = nullptr;
+	cout << "Not In range\n" << i_VertexId << "\n";
 
-	if (io_PhyzSize == io_LogicSize)
-	{
-		io_PhyzSize *= 2;
-		newArr = new int[io_PhyzSize];
-		memcpy(newArr, io_Array, sizeof(int) * io_LogicSize);
-		delete[]io_Array;
-		io_Array = newArr;
-	}
-	io_Array[io_LogicSize++];
 }
 
-
-bool InpuOutput::isWhitespace(char ch)
-{
-	return ch == ' ' || ch == '\n' || ch == '\t' || ch == '\r' || ch == '\v' || ch == '\f';
-}
