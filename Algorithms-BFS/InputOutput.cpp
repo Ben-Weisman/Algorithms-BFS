@@ -64,10 +64,10 @@ int* InpuOutput::getEdges(int& o_NumberOfEdegs, int i_maxVertexId)
 
 	cout << "Please start to eneter the edges: ";
 
-	while (ch != EOF)
+	while (ch != cin.eof())
 	{
 		ch = getchar();
-		while (!isWhitespace(ch) && ch != EOF)
+		while (!isWhitespace(ch) && ch != cin.eof())
 		{
 			currentNumber = 10 * currentNumber + ch - '0';
 			ch = getchar();
