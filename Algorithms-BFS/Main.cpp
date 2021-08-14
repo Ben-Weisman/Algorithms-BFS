@@ -3,7 +3,16 @@
 #include <iostream>
 #include <chrono>
 using namespace std;
-
+/// <summary>
+/// This is the maing function of the program. 
+/// this function building a graph by giving the number of vertex 
+/// (the same value as the max number that aa vertex can be)
+/// After that the program getting vertex that called "s"(start), and vertex that called "t"(target),
+/// the main purpose is to find the shortest paths by giving serial of edges from the user 
+/// (like the others inputs)
+/// The system calculate the running time and print it,
+///  but befor, it will print all the edges that included in the shortest paths between "s" to "t". 
+/// </summary>
 void main()
 {
 
