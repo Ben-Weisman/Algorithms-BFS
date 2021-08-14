@@ -20,7 +20,12 @@ private:
 	VertexNode** m_NeighborList;
 	VertexNode* m_Head;
 	VertexNode* m_Tail;
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="i_d"></param>
+	/// <param name="i_VertexNum"></param>
+	/// <returns></returns>
 	bool IsPathExists(const int* i_d, const int i_VertexNum);
 
 public:
@@ -59,7 +64,7 @@ public:
 	Param: source vertex s
 	returns: d array which represents the shortest distance of each vertex v from source vertex s
 	*/
-	int* BFS(int s);
+	int* BFS(int s, int* i_p);
 
 	/*
 	Removes edges that are not part of the shortest path from s to given vertex v.
@@ -96,6 +101,8 @@ public:
 	Param: source vertex s and destination vertex t
 	*/
 	Graph* FindShortestPaths(int s, int t);
+
+	VertexNode** GetNeighborList();
 
 };
 

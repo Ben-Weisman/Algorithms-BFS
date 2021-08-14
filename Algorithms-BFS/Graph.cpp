@@ -16,7 +16,8 @@ Graph::Graph(const Graph& g)
 {
 	Graph* res = new Graph();
 	res->MakeEmptyGraph(g.m_numVertices);
-
+	res->m_numVertices = g.m_numVertices;
+	
 	VertexNode* u;
 	VertexNode* v = nullptr;
 
@@ -29,9 +30,9 @@ Graph::Graph(const Graph& g)
 			while (v != nullptr)
 			{
 				res->AddEdge(u->GetVertexNum(), v->GetVertexNum());
-				v->GetNext();
+				v = v->GetNext();
 			}
-			u->GetNext();
+			
 		}
 	}
 }
@@ -56,6 +57,7 @@ Graph::~Graph()
 
 void Graph::MakeEmptyGraph(int i_NumVertices)
 {
+	m_numVertices = i_NumVertices;
 	if (i_NumVertices > 0)
 	{
 		m_NeighborList = new VertexNode * [i_NumVertices];
@@ -152,13 +154,22 @@ void Graph::AddEdge(const int i,const int j)
 		if (sourceVertex != nullptr)
 		{
 			VertexNode* newNode = new VertexNode(j);
-			sourceVertex->GetVertexLastNeighbor()->SetNext(newNode);
-			sourceVertex->SetVertexLastNeighbor(newNode);
+			if (sourceVertex->GetVertexNeighbors() == nullptr) // neighbors list is empty
+			{
+				sourceVertex->SetSubListHeader(newNode);
+				sourceVertex->SetVertexLastNeighbor(newNode);
+			}
+			else 
+			{
+				sourceVertex->GetVertexLastNeighbor()->SetNext(newNode);
+				sourceVertex->SetVertexLastNeighbor(newNode);
+			}
+
 		}
 	}
 }
 
-int* Graph::BFS(int s)
+int* Graph::BFS(int s, int* i_p)
 {
 
 	int* d = new int[m_numVertices];
@@ -169,6 +180,7 @@ int* Graph::BFS(int s)
 	for (int i = 0; i < m_numVertices; i++)
 	{
 		d[i] = -1;
+		i_p[i] = -1;
 	}
 
 	// Source is the first vertex to be visited.
@@ -191,6 +203,7 @@ int* Graph::BFS(int s)
 			if (d[v] == -1) // check if d[v] isn't updated yet. 
 			{
 				d[v] = d[u] + 1;
+				i_p[v] = u + 1;
 				q.Enqueue(currAdj);
 			}
 			else if (d[v] > d[u] + 1)
@@ -207,8 +220,10 @@ int* Graph::BFS(int s)
 
 Graph* Graph::FindShortestPaths(int s, int t)
 {
-	int* d = Graph::BFS(s); // Section A
-	Graph* gs = new Graph(*this); // TODO: check if correct copying
+	int* p = new int [m_numVertices];
+	int* d = Graph::BFS(s, p); // Section A
+	Graph* gs = this;
+	//Graph* gs = new Graph(*this); // TODO: check if correct copying
 	if (!IsPathExists(d, t))
 	{
 		return nullptr;
@@ -218,52 +233,95 @@ Graph* Graph::FindShortestPaths(int s, int t)
 
 	Graph* gsTranspose = CreateTransposeGraph(gs); // Part C
 
-	d = gsTranspose->BFS(t); // Part D
+	d = gsTranspose->BFS(t,p); // Part D
 	if (!IsPathExists(d, s))
 	{
 		return nullptr;
 	}
 	gsTranspose->RemoveUnaccessibleVerticesAndItsEdges(d);
 	delete[] d;
-	delete gs;
+	//delete gs;
 	Graph* hRes = gsTranspose->CreateTransposeGraph(gsTranspose); // Section E
 	delete gsTranspose;
+	delete[] p;
 	return hRes;
 	
 }
 
 void Graph::RemoveLongerPathsFromGraph(int* d, int s)
 {
-	VertexNode* currentVertex = m_NeighborList[s - 1];
-	VertexNode* neighborOfCurrentVertex = nullptr;
+	//VertexNode* currentVertex = m_NeighborList[s - 1];
+	//VertexNode* neighborOfCurrentVertex = nullptr;
+	//bool* visited = new bool[m_numVertices];
 
 
-	Queue q;
-	int u;
+	///////////////
 
-
-	// Source is the first vertex to be visited.
-	q.Enqueue(new VertexNode(s));
-
-	while (!q.IsEmpty())
+	for (int i = 0; i < this->m_numVertices; i++)
 	{
-		// u = prev vertex
-		u = q.Dequeue()->GetVertexNum();
-		VertexNode* currAdj = m_NeighborList[u]->GetVertexNeighbors();
+		VertexNode* currAdj = this->m_NeighborList[i]->GetVertexNeighbors();
 
 		while (currAdj != nullptr)
 		{
-			int v = currAdj->GetVertexNum(); // u's neighbor integer value
-
-			if (d[u - 1] + 1 > d[v - 1])
+			int v = currAdj->GetVertexNum();
+			if (d[i] + 1 > d[v - 1])
 			{
-				RemoveEdge(u, v);
+				VertexNode* nextNodePtr = currAdj->GetNext();
+				RemoveEdge(i+1, v);
+				currAdj = nextNodePtr;
 			}
-
-
-			currAdj = currAdj->GetNext();
+			else
+			{
+				currAdj = currAdj->GetNext();
+			}
+			
 		}
 	}
+
+
+
+	/////////////
+	//for (int i = 0; i < m_numVertices; i++)
+	//{
+	//	visited[i] = false;
+	//}
+
+	//Queue q;
+	//int u;
+
+
+	// Source is the first vertex to be visited.
+	//q.Enqueue(new VertexNode(s));
+
+	//while (!q.IsEmpty())
+	//{
+	//	 u = prev vertex
+	//	u = q.Dequeue()->GetVertexNum();
+	//	visited[u - 1] = true;
+	//	VertexNode* currAdj = m_NeighborList[u-1]->GetVertexNeighbors();
+
+	//	while (currAdj != nullptr)
+	//	{
+	//		int v = currAdj->GetVertexNum(); // u's neighbor integer value
+
+	//		if (!visited[v - 1])
+	//		{
+	//			q.Enqueue(currAdj);
+	//		}
+	//		
+	//		if (d[u - 1] + 1 > d[v - 1])
+	//		{
+	//			VertexNode* tmp = currAdj->GetNext();
+	//			RemoveEdge(u, v);
+	//			currAdj = tmp;
+	//		}
+	//		else
+	//		{
+	//			currAdj = currAdj->GetNext();
+	//		}
+	//		
+	//	}
+	//}
 }
 
 void Graph::RemoveUnaccessibleVerticesAndItsEdges(int* d)
@@ -292,20 +350,26 @@ void Graph::RemoveVertexAndItsEdges(int i_vertexNum)
 		VertexNode* tmp = m_NeighborList[i_vertexNum - 1];
 		delete tmp;
 		m_NeighborList[i_vertexNum - 1] = nullptr;
+		this->m_numVertices--;
 	}
 }
 void Graph::ReadGraph()
 {
 	InpuOutput io;
-	int numberOfEdges = 0;
-	int* arrayOfEdges = io.getEdges(numberOfEdges, m_numVertices);
+	int numberOfEdges = 14;
+	//int* arrayOfEdges = io.getEdges(numberOfEdges, m_numVertices);
+
+	//
+	int edges[] = { 6, 5 ,5 ,6, 6, 1, 1, 6, 1, 5, 2, 5, 1, 2, 2, 1, 5, 4, 4, 2, 5, 3, 4, 3, 2, 3, 3, 1 };
+	//
 
 	for (int i = 0; i < numberOfEdges * 2; i += 2)
 	{
-		this->AddEdge(i, i + 1);
+		this->AddEdge(edges[i], edges[i + 1]);
 	}
-
-	delete[] arrayOfEdges;
+	
+	
+	//delete[] arrayOfEdges;
 };
 
 int Graph::GetNumberOfVertices()
@@ -323,7 +387,7 @@ Graph* Graph::CreateTransposeGraph(Graph* g)
 	{
 		if (g->GetAdjList(i + 1) != nullptr)
 		{
-			iNeighbor = g->GetAdjList(i + 1)->GetVertexNeighbors();
+			iNeighbor = g->GetAdjList(i + 1);
 			while (iNeighbor != nullptr)
 			{
 				gt->AddEdge(iNeighbor->GetVertexNum(), i+1);
@@ -336,5 +400,10 @@ Graph* Graph::CreateTransposeGraph(Graph* g)
 
 bool Graph::IsPathExists(const int* d,const int i_VertexNum)
 {
-	return d[i_VertexNum - 1] == -1;
+	return d[i_VertexNum - 1] != -1;
+}
+
+VertexNode** Graph::GetNeighborList()
+{
+	return m_NeighborList;
 }

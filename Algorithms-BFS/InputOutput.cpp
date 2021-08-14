@@ -63,7 +63,6 @@ int* InpuOutput::getEdges(int& o_NumberOfEdegs, int i_maxVertexId)
 	int* arr = new int[phyzSize];
 
 	cout << "Please start to eneter the edges: ";
-
 	while (ch != EOF)
 	{
 		ch = getchar();
@@ -97,13 +96,17 @@ void InpuOutput::printGraph(Graph& i_g)
 	VertexNode* currentVertexNeghiborList;
 	for (int i = 1; i <= i_g.GetNumberOfVertices(); i++)
 	{
-		currentVertexNeghiborList = i_g.GetAdjList(i);
-		while (currentVertexNeghiborList != nullptr)
+		if (i_g.GetNeighborList()[i-1] != nullptr)
 		{
-			cout << "(" + i + ',' + currentVertexNeghiborList->GetVertexNum() + '), ';
-			currentVertexNeghiborList = currentVertexNeghiborList->GetNext();
+			currentVertexNeghiborList = i_g.GetAdjList(i);
+			while (currentVertexNeghiborList != nullptr)
+			{
+				int n = currentVertexNeghiborList->GetVertexNum();
+				cout << i << " " << n << " ";
+				//cout << "(" + i + ',' + n + '), ';
+				currentVertexNeghiborList = currentVertexNeghiborList->GetNext();
+			}
 		}
-
 	}
 }
 
