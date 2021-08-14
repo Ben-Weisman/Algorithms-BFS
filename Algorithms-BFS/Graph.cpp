@@ -154,7 +154,7 @@ void Graph::AddEdge(const int i,const int j)
 		if (sourceVertex != nullptr)
 		{
 			VertexNode* newNode = new VertexNode(j);
-			if (sourceVertex->GetVertexLastNeighbor() == nullptr) // neighbors list is empty
+			if (sourceVertex->GetVertexNeighbors() == nullptr) // neighbors list is empty
 			{
 				sourceVertex->SetSubListHeader(newNode);
 				sourceVertex->SetVertexLastNeighbor(newNode);
@@ -367,7 +367,8 @@ void Graph::ReadGraph()
 	{
 		this->AddEdge(edges[i], edges[i + 1]);
 	}
-
+	
+	
 	//delete[] arrayOfEdges;
 };
 
@@ -400,4 +401,9 @@ Graph* Graph::CreateTransposeGraph(Graph* g)
 bool Graph::IsPathExists(const int* d,const int i_VertexNum)
 {
 	return d[i_VertexNum - 1] != -1;
+}
+
+VertexNode** Graph::GetNeighborList()
+{
+	return m_NeighborList;
 }

@@ -102,6 +102,8 @@ public:
 	*/
 	Graph* FindShortestPaths(int s, int t);
 
+	VertexNode** GetNeighborList();
+
 };
 
 #endif // !__GRAPH_H
