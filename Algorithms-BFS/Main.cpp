@@ -13,7 +13,7 @@ using namespace std;
 /// The system calculate the running time and print it,
 ///  but befor, it will print all the edges that included in the shortest paths between "s" to "t". 
 /// </summary>
-void main()
+int  main()
 {
 
 	Graph g;
@@ -50,5 +50,5 @@ void main()
 	else {
 		io.printIdenticalStartAndEndVertexes();
 	}
-
+	return 0;
 }
