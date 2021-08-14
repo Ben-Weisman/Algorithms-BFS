@@ -1,6 +1,8 @@
 #include "InputOutput.h"
 #include "Graph.h"
-
+#include <iostream>
+#include <chrono>
+using namespace std;
 
 //TODO: adding the runtime function.
 void main()
@@ -13,18 +15,32 @@ void main()
 	countOfVertex = io.getCountOfVertexFromUser();
 	int s = io.getStartVertex(countOfVertex);
 	int t = io.getTargetVertex(countOfVertex);
-	g.MakeEmptyGraph(countOfVertex);
-	g.ReadGraph();
-	h = g.FindShortestPaths(s, t);
-	if (h == nullptr)
-	{
-		io.printNoPathErrorAndExit();
-	}
-	else
-	{
-		io.printGraph(*h);
-	}
+	
+	if (s != t) {
+		g.MakeEmptyGraph(countOfVertex);
+		g.ReadGraph();
+		auto start = chrono::high_resolution_clock::now();
+		ios_base::sync_with_stdio(false);
 
-	delete h;
+		h = g.FindShortestPaths(s, t);
+
+		auto end = chrono::high_resolution_clock::now();
+
+		double time_taken = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
+		if (h == nullptr)
+		{
+			io.printNoPathErrorAndExit();
+		}
+		else
+		{
+			io.printGraph(*h);
+			io.PrintRunTimeValue(time_taken);
+		}
+
+		delete h;
+	}
+	else {
+		io.printIdenticalStartAndEndVertexes();
+	}
 
 }
