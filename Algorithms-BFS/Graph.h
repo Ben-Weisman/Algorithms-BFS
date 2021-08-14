@@ -21,6 +21,8 @@ private:
 	VertexNode* m_Head;
 	VertexNode* m_Tail;
 
+	bool IsPathExists(const int* i_d, const int i_VertexNum);
+
 public:
 	Graph();
 	~Graph();
@@ -63,7 +65,7 @@ public:
 	Removes edges that are not part of the shortest path from s to given vertex v.
 	Param: d array that represents the shortest path from s to given v, and the source vertex (Created at BFS method).
 	*/
-	void RemoveIrrelevantEdges(int* d, int s);
+	void RemoveLongerPathsFromGraph(int* d, int s);
 
 	/*
 	Removes all vertices that are not part of the shortest path from s to t. (that are not part of the connected component of the graph.
@@ -71,7 +73,7 @@ public:
 	void RemoveUnaccessibleVerticesAndItsEdges(int* d);
 
 
-	void RemoveVertexEdges(int vertexId);
+	void RemoveVertexAndItsEdges(int vertexId);
 
 	/*
 	Reads the graph from stdin using InputOutput class.*/
@@ -79,9 +81,9 @@ public:
 
 
 	// returns m_numVertices.
-	int getNumberOfVertex();
+	int GetNumberOfVertices();
 
-	int IsEmpty();
+	bool IsEmpty();
 
 	/*
 	Returns the transpose of given g graph. 

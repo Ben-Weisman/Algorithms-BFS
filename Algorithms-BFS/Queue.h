@@ -5,8 +5,10 @@
 
 // Queue data node contains a reference to a VertexNode object instance.
 struct QNode {
+
 	VertexNode* vertexNode;
 	QNode* next;
+
 	QNode(VertexNode* v)
 	{
 		vertexNode = v;
@@ -24,7 +26,7 @@ private:
 public:
 	Queue();
 	void Enqueue(VertexNode* v);
-	QNode* Dequeue();
+	VertexNode* Dequeue();
 	bool IsEmpty();
 	QNode* Peek();
 };

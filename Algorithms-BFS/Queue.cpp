@@ -5,19 +5,25 @@ Queue::Queue()
 	m_Tail = m_Head = nullptr;
 }
 
-QNode* Queue::Dequeue()
+VertexNode* Queue::Dequeue()
 {
 	if (m_Head == nullptr)
 	{
 		return nullptr;
 	}
-	QNode* res = m_Head;
+	QNode* toDequeue = m_Head;
+	VertexNode* res = toDequeue->vertexNode;
+	
 	m_Head = m_Head->next;
 
 	if (m_Head == nullptr)
 	{
 		m_Tail = nullptr;
 	}
+
+	toDequeue->vertexNode = nullptr;
+	delete toDequeue;
+
 	return res;
 }
 

@@ -92,11 +92,10 @@ int* InpuOutput::getEdges(int& o_NumberOfEdegs, int i_maxVertexId)
 	return arr;
 
 }
-//TODO: Need to implement;
 void InpuOutput::printGraph(Graph& i_g)
 {
 	VertexNode* currentVertexNeghiborList;
-	for (int i = 1; i <= i_g.getNumberOfVertex(); i++)
+	for (int i = 1; i <= i_g.GetNumberOfVertices(); i++)
 	{
 		currentVertexNeghiborList = i_g.GetAdjList(i);
 		while (currentVertexNeghiborList != nullptr)

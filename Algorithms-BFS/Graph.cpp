@@ -6,7 +6,9 @@
 
 Graph::Graph()
 {
-
+	m_Head = m_Tail = nullptr;
+	m_numVertices = 0;
+	m_NeighborList = nullptr;
 };
 
 
@@ -15,18 +17,22 @@ Graph::Graph(const Graph& g)
 	Graph* res = new Graph();
 	res->MakeEmptyGraph(g.m_numVertices);
 
-	VertexNode* u = g.m_Head;
+	VertexNode* u;
 	VertexNode* v = nullptr;
 
-	while (u != nullptr)
+	for (int i = 0; i < g.m_numVertices; i++)
 	{
-		v = u->GetVertexNeighbors();
-		while (v != nullptr)
+		u = g.m_NeighborList[i];
+		if (u != nullptr)
 		{
-			res->AddEdge(u->GetVertexNum(), v->GetVertexNum());
-			v->GetNext();
+			v = u->GetVertexNeighbors();
+			while (v != nullptr)
+			{
+				res->AddEdge(u->GetVertexNum(), v->GetVertexNum());
+				v->GetNext();
+			}
+			u->GetNext();
 		}
-		u->GetNext();
 	}
 }
 
@@ -34,12 +40,15 @@ Graph::~Graph()
 {
 	for (int i = 0; i < m_numVertices; i++)
 	{
-		VertexNode* currAdjNode = m_NeighborList[i]->GetVertexNeighbors();
-		while (currAdjNode != nullptr)
+		if (m_NeighborList[i] != nullptr)
 		{
-			VertexNode* tmpNodePtr = currAdjNode->GetNext();
-			delete currAdjNode;
-			currAdjNode = tmpNodePtr;
+			VertexNode* currAdjNode = m_NeighborList[i]->GetVertexNeighbors();
+			while (currAdjNode != nullptr)
+			{
+				VertexNode* tmpNodePtr = currAdjNode->GetNext();
+				delete currAdjNode;
+				currAdjNode = tmpNodePtr;
+			}
 		}
 	}
 	delete[]m_NeighborList;
@@ -53,9 +62,10 @@ void Graph::MakeEmptyGraph(int i_NumVertices)
 
 		for (int i = 0; i < i_NumVertices; i++)
 		{
-			m_NeighborList[i] = nullptr;
+			m_NeighborList[i] = new VertexNode(i+1);
 		}
 	}
+	
 }
 
 bool Graph::IsAdjacent(int v, int u)
@@ -64,14 +74,18 @@ bool Graph::IsAdjacent(int v, int u)
 	if ((v >= 1 && v <= m_numVertices) && (u >= 1 && u <= m_numVertices))
 	{
 		VertexNode* sourceVertex = m_NeighborList[v - 1];
-		VertexNode* currAdjNode = sourceVertex->GetVertexNeighbors();
 
-		while (currAdjNode != nullptr)
+		if (sourceVertex != nullptr)
 		{
-			if (currAdjNode->GetVertexNum() == u)
+			VertexNode* currAdjNode = sourceVertex->GetVertexNeighbors();
+
+			while (currAdjNode != nullptr)
 			{
-				res = true;
-				break;
+				if (currAdjNode->GetVertexNum() == u)
+				{
+					res = true;
+					break;
+				}
 			}
 		}
 	}
@@ -81,11 +95,12 @@ bool Graph::IsAdjacent(int v, int u)
 
 VertexNode* Graph::GetAdjList(int u)
 {
-	if (m_NeighborList[u - 1] == nullptr)
+	VertexNode* res = nullptr;
+	if (m_NeighborList[u - 1] != nullptr)
 	{
-		return nullptr;
+		res = m_NeighborList[u - 1]->GetVertexNeighbors();
 	}
-	return m_NeighborList[u - 1]->GetVertexNeighbors();
+	return res;
 }
 
 
@@ -93,36 +108,38 @@ VertexNode* Graph::GetAdjList(int u)
 void Graph::RemoveEdge(int v, int u)
 {
 	VertexNode* sourceNode = m_NeighborList[v - 1];
-	VertexNode* currAdjVertex = sourceNode->GetVertexNeighbors();
-	VertexNode* prevNode = nullptr;
 
-	while (currAdjVertex != nullptr)
+	if (sourceNode != nullptr)
 	{
-		if (currAdjVertex->GetVertexNum() == u)
+		VertexNode* currAdjVertex = sourceNode->GetVertexNeighbors();
+		VertexNode* prevNode = nullptr;
+
+		while (currAdjVertex != nullptr)
 		{
-			if (prevNode != nullptr)
+			if (currAdjVertex->GetVertexNum() == u)
 			{
-				prevNode->SetNext(currAdjVertex->GetNext());
+				if (prevNode != nullptr)
+				{
+					prevNode->SetNext(currAdjVertex->GetNext());
+				}
+				else // first node was found
+				{
+					sourceNode->SetSubListHeader(currAdjVertex->GetNext());
+				}
+				delete currAdjVertex;
+				break;
 			}
-			else // first node was found
-			{
-				sourceNode->SetSubListHeader(currAdjVertex->GetNext());
-			}
-			delete currAdjVertex;
-			break;
+			prevNode = currAdjVertex;
+			currAdjVertex = currAdjVertex->GetNext();
 		}
-		prevNode = currAdjVertex;
-		currAdjVertex = currAdjVertex->GetNext();
-
 	}
-
 }
 
-int Graph::IsEmpty()
+bool Graph::IsEmpty()
 {
-	int res = 0;
+	bool res = false;
 	if (m_numVertices == 0)
-		res = 1;
+		res = true;
 	return res;
 }
 
@@ -131,9 +148,13 @@ void Graph::AddEdge(const int i,const int j)
 	if ((i >= 1 && i <= m_numVertices) && (j >= 1 && j <= m_numVertices))
 	{
 		VertexNode* sourceVertex = m_NeighborList[i - 1];
-		VertexNode* newNode = new VertexNode(j);
-		sourceVertex->GetVertexLastNeighbor()->SetNext(newNode);
-		sourceVertex->SetVertexLastNeighbor(newNode);
+
+		if (sourceVertex != nullptr)
+		{
+			VertexNode* newNode = new VertexNode(j);
+			sourceVertex->GetVertexLastNeighbor()->SetNext(newNode);
+			sourceVertex->SetVertexLastNeighbor(newNode);
+		}
 	}
 }
 
@@ -160,21 +181,23 @@ int* Graph::BFS(int s)
 	while (!q.IsEmpty())
 	{
 		// u = prev vertex
-		// i = u's neighbor (as type VertexNode)
-		u = q.Dequeue()->vertexNode->GetVertexNum() - 1;
-		for (VertexNode* i = m_NeighborList[u]->GetVertexNeighbors(); i != nullptr; i = i->GetNext()) // Iterate through all of u's neighbors.
+		u = q.Dequeue()->GetVertexNum() - 1;
+		VertexNode* currAdj = m_NeighborList[u]->GetVertexNeighbors();
+
+		while (currAdj != nullptr)
 		{
-			int v = i->GetVertexNum() - 1; // u's neighbor integer value
+			int v = currAdj->GetVertexNum() - 1; // u's neighbor integer value
 
 			if (d[v] == -1) // check if d[v] isn't updated yet. 
 			{
 				d[v] = d[u] + 1;
-				q.Enqueue(i);
+				q.Enqueue(currAdj);
 			}
 			else if (d[v] > d[u] + 1)
 			{
 				d[v] = d[u] + 1;
 			}
+			currAdj = currAdj->GetNext();
 		}
 	}
 
@@ -185,27 +208,31 @@ int* Graph::BFS(int s)
 Graph* Graph::FindShortestPaths(int s, int t)
 {
 	int* d = Graph::BFS(s); // Section A
-	Graph* gs = this; // TODO: check if correct copying
-	if (d[t - 1] == -1)
+	Graph* gs = new Graph(*this); // TODO: check if correct copying
+	if (!IsPathExists(d, t))
 	{
 		return nullptr;
 	}
-	gs->RemoveIrrelevantEdges(d, s); // Section B
+	gs->RemoveLongerPathsFromGraph(d, s); // Section B
 	gs->RemoveUnaccessibleVerticesAndItsEdges(d);
 
 	Graph* gsTranspose = CreateTransposeGraph(gs); // Part C
 
 	d = gsTranspose->BFS(t); // Part D
-	if (d[s - 1] == -1)
+	if (!IsPathExists(d, s))
 	{
 		return nullptr;
 	}
 	gsTranspose->RemoveUnaccessibleVerticesAndItsEdges(d);
-	return gsTranspose->CreateTransposeGraph(gsTranspose); // Section E
-
+	delete[] d;
+	delete gs;
+	Graph* hRes = gsTranspose->CreateTransposeGraph(gsTranspose); // Section E
+	delete gsTranspose;
+	return hRes;
+	
 }
 
-void Graph::RemoveIrrelevantEdges(int* d, int s)
+void Graph::RemoveLongerPathsFromGraph(int* d, int s)
 {
 	VertexNode* currentVertex = m_NeighborList[s - 1];
 	VertexNode* neighborOfCurrentVertex = nullptr;
@@ -221,43 +248,51 @@ void Graph::RemoveIrrelevantEdges(int* d, int s)
 	while (!q.IsEmpty())
 	{
 		// u = prev vertex
-		// i = u's neighbor (as type VertexNode)
-		u = q.Dequeue()->vertexNode->GetVertexNum();
-		for (VertexNode* i = m_NeighborList[u]->GetVertexNeighbors(); i != nullptr; i = i->GetNext()) // Iterate through all of u's neighbors.
+		u = q.Dequeue()->GetVertexNum();
+		VertexNode* currAdj = m_NeighborList[u]->GetVertexNeighbors();
+
+		while (currAdj != nullptr)
 		{
-			int v = i->GetVertexNum(); // u's neighbor integer value
+			int v = currAdj->GetVertexNum(); // u's neighbor integer value
 
 			if (d[u - 1] + 1 > d[v - 1])
 			{
 				RemoveEdge(u, v);
 			}
+
+
+			currAdj = currAdj->GetNext();
 		}
 	}
 }
 
 void Graph::RemoveUnaccessibleVerticesAndItsEdges(int* d)
 {
-	//TODO: Implement RemoveAllEdges & RemoveVertex.
+	
 	for (int i = 0; i < m_numVertices; i++)
 	{
 		if (d[i] == -1) // Vertex is inaccessible 
 		{
-			RemoveVertexEdges(i + 1);
+			RemoveVertexAndItsEdges(i + 1);
 		}
 	}
 }
-void Graph::RemoveVertexEdges(int i_vertexNum)
+void Graph::RemoveVertexAndItsEdges(int i_vertexNum)
 {
-	VertexNode* neighbor = m_NeighborList[i_vertexNum - 1]->GetVertexNeighbors();
-	VertexNode* nextNeighbor;
-	while (neighbor != nullptr)
+	if (m_NeighborList[i_vertexNum - 1] != nullptr)
 	{
-		nextNeighbor = neighbor->GetNext();
-		delete neighbor;
-		neighbor = nextNeighbor;
+		VertexNode* neighbor = m_NeighborList[i_vertexNum - 1]->GetVertexNeighbors();
+		VertexNode* nextNeighbor;
+		while (neighbor != nullptr)
+		{
+			nextNeighbor = neighbor->GetNext();
+			delete neighbor;
+			neighbor = nextNeighbor;
+		}
+		VertexNode* tmp = m_NeighborList[i_vertexNum - 1];
+		delete tmp;
+		m_NeighborList[i_vertexNum - 1] = nullptr;
 	}
-	// delete m_NeighborList[vertexId - 1]
-//TODO: should re- organized the array or should we just print the vertex and the heighbors that not nullptr?
 }
 void Graph::ReadGraph()
 {
@@ -269,9 +304,11 @@ void Graph::ReadGraph()
 	{
 		this->AddEdge(i, i + 1);
 	}
+
+	delete[] arrayOfEdges;
 };
 
-int Graph::getNumberOfVertex()
+int Graph::GetNumberOfVertices()
 {
 	return m_numVertices;
 }
@@ -280,17 +317,24 @@ Graph* Graph::CreateTransposeGraph(Graph* g)
 {
 	Graph* gt = new Graph();
 	VertexNode* iNeighbor;
-	gt->MakeEmptyGraph(g->getNumberOfVertex());
+	gt->MakeEmptyGraph(g->GetNumberOfVertices());
 
-	for (int i = 0; i < g->getNumberOfVertex(); i++)
+	for (int i = 0; i < g->GetNumberOfVertices(); i++)
 	{
-		iNeighbor = g->GetAdjList(i)->GetVertexNeighbors();
-		while (iNeighbor != nullptr)
+		if (g->GetAdjList(i + 1) != nullptr)
 		{
-			gt->AddEdge(iNeighbor->GetVertexNum(), i);
-			iNeighbor = iNeighbor->GetNext();
+			iNeighbor = g->GetAdjList(i + 1)->GetVertexNeighbors();
+			while (iNeighbor != nullptr)
+			{
+				gt->AddEdge(iNeighbor->GetVertexNum(), i+1);
+				iNeighbor = iNeighbor->GetNext();
+			}
 		}
 	}
 	return gt;
-
 };
+
+bool Graph::IsPathExists(const int* d,const int i_VertexNum)
+{
+	return d[i_VertexNum - 1] == -1;
+}
