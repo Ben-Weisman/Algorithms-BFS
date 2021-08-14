@@ -3,6 +3,7 @@
 #include "Graph.h"
 #include "VertexNode.h"
 
+// Class Description:
 // Queue data node contains a reference to a VertexNode object instance.
 struct QNode {
 

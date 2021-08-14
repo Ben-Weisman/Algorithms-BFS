@@ -6,6 +6,9 @@
 #define MIN_RANGE_OF_VERTEX 1
 #define MIN_AMOUNT_OF_VERTEX 2
 
+// Class Description: 
+// Handles every input \ output methods which interacts with the user. 
+
 static class InpuOutput
 {
 public:

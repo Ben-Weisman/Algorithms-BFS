@@ -4,14 +4,10 @@
 #include "Queue.h"
 class InputOutput; // forward declaration
 
-/*TODO:
-1. Overloading AddEdge function?.
-4. Print graph (No specific format given)
+// Class Description:
+// This class represents a directed graph. 
+// The Neibhbors list is implemented using VertexNode object.
 
-2 options to init graph:
-	- Empty C'tor (Empty graph with no vertices) -> ReadGraph from keyboard.
-	- C'tor that gets number of vertices (i.e MakeEmptyGraph()) -- Creates empty graph with n vertices
-*/
 
 class Graph
 {

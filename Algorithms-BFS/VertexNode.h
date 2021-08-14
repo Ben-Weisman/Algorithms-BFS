@@ -1,6 +1,11 @@
 #ifndef __VERTEXNODE_H
 #define __VERTEXNODE_H
 
+
+// Class Description:
+// Each vertex in the graph is implemented using VertexNode class, which constains a constant vertex value (1-n)
+// And a pointer to its adjacency list (if there is one).
+
 class VertexNode
 {
 private:
